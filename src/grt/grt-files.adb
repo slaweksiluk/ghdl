@@ -169,8 +169,11 @@ package body Grt.Files is
 
    function Ghdl_File_Endfile (File : Ghdl_File_Index) return Boolean
    is
+      O_NONBLOCK : constant integer := 8#04000#;
+      F_SETFL : constant integer :=  4;
       Stream : C_Files;
       C : int;
+      R : int;
    begin
       Stream := Get_File (File);
 
@@ -193,6 +196,12 @@ package body Grt.Files is
       if feof (Stream) /= 0 then
          return True;
       end if;
+
+      R := fcntl (fileno (Stream), F_SETFL, O_NONBLOCK);
+      if R < 0 then
+         Error ("internal error: fcntl");
+      end if;
+
       C := fgetc (Stream);
       if C < 0 then
          return True;

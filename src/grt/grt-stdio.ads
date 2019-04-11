@@ -73,6 +73,8 @@ package Grt.Stdio is
    procedure fflush (stream : FILEs);
 
    function feof (stream : FILEs) return int;
+   function fcntl (stream : int; cmd : int; arg : int) return int;
+   function fileno (stream : FILEs) return int;
 
    function ftell (stream : FILEs) return long;
 
@@ -101,6 +103,8 @@ private
 
    pragma Import (C, fflush);
    pragma Import (C, feof, "feof_unlocked");
+   pragma Import (C, fcntl);
+   pragma Import (C, fileno);
    pragma Import (C, ftell);
    pragma Import (C, fclose);
 
